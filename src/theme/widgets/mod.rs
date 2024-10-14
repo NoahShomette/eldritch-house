@@ -4,6 +4,8 @@ use bevy::{ecs::system::EntityCommands, prelude::*, ui::Val::*};
 
 use crate::theme::{interaction::InteractionPalette, palette::*};
 
+pub(super) fn plugin(app: &mut App) {}
+
 /// An extension trait for spawning UI widgets.
 pub trait Widgets {
     /// Spawn a simple button with text.
