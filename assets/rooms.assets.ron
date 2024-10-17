@@ -1,0 +1,7 @@
+({
+
+"room_assets": Files(
+    paths:["rooms/entrance.room.json"]
+)
+
+})

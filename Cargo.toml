@@ -25,6 +25,11 @@ tracing = { version = "0.1", features = [
     "max_level_debug",
     "release_max_level_warn",
 ] }
+bevy_common_assets = { version = "0.11.0", features = ["json"] }
+serde = "1.0.210"
+bevy_asset_loader = { version = "0.21.0", features = [
+    "standard_dynamic_assets",
+] }
 
 [features]
 default = [

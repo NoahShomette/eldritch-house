@@ -1,0 +1,8 @@
+{
+    "room_name": "entrance",
+    "allowed_directions": [
+        "North",
+        "East",
+        "West"
+    ]
+}

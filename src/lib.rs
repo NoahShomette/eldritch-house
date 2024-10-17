@@ -1,4 +1,3 @@
-mod asset_tracking;
 pub mod audio;
 mod camera;
 #[cfg(feature = "dev")]
@@ -12,6 +11,14 @@ use bevy::{
     audio::{AudioPlugin, Volume},
     prelude::*,
 };
+use bevy_asset_loader::loading_state::{LoadingState, LoadingStateAppExt};
+
+#[derive(States, Debug, PartialEq, Eq, Clone, Hash, Default)]
+pub enum AppLoadingState {
+    #[default]
+    Loading,
+    Loaded,
+}
 
 pub struct AppPlugin;
 
@@ -51,15 +58,13 @@ impl Plugin for AppPlugin {
                     ..default()
                 }),
         );
+        app.enable_state_scoped_entities::<AppLoadingState>();
+        app.init_state::<AppLoadingState>().add_loading_state(
+            LoadingState::new(AppLoadingState::Loading).continue_to_state(AppLoadingState::Loaded),
+        );
 
         // Add other plugins.
-        app.add_plugins((
-            camera::plugin,
-            asset_tracking::plugin,
-            screens::plugin,
-            theme::plugin,
-            map::plugin,
-        ));
+        app.add_plugins((camera::plugin, screens::plugin, theme::plugin, map::plugin));
 
         // Enable dev tools for dev builds.
         #[cfg(feature = "dev")]
