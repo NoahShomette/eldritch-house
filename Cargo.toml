@@ -11,8 +11,18 @@ rand = "0.8"
 # Animations
 toa_animator = { git = "https://github.com/NoahShomette/toa_animator.git" }
 
+# Camera
+bevy_pixel_camera = { git = "https://github.com/porkbrain/bevy_pixel_camera", rev = "623860527e646776a76c8def559c91e184fba116" }
+
 # Misc
 bevy_easy_stats = { git = "https://github.com/NoahShomette/bevy_easy_stats.git" }
+serde = "1.0.210"
+
+# Asset Management
+bevy_common_assets = { version = "0.11.0", features = ["json"] }
+bevy_asset_loader = { version = "0.21.0", features = [
+    "standard_dynamic_assets",
+] }
 
 
 # Compile low-severity logs out of native builds for performance.
@@ -25,11 +35,7 @@ tracing = { version = "0.1", features = [
     "max_level_debug",
     "release_max_level_warn",
 ] }
-bevy_common_assets = { version = "0.11.0", features = ["json"] }
-serde = "1.0.210"
-bevy_asset_loader = { version = "0.21.0", features = [
-    "standard_dynamic_assets",
-] }
+
 
 [features]
 default = [

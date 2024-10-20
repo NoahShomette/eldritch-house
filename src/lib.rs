@@ -56,7 +56,8 @@ impl Plugin for AppPlugin {
                         volume: Volume::new(0.3),
                     },
                     ..default()
-                }),
+                })
+                .set(ImagePlugin::default_nearest()),
         );
         app.enable_state_scoped_entities::<AppLoadingState>();
         app.init_state::<AppLoadingState>().add_loading_state(

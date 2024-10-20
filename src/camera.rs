@@ -1,6 +1,8 @@
 use bevy::prelude::*;
+use bevy_pixel_camera::{PixelCameraPlugin, PixelViewport, PixelZoom};
 
 pub(super) fn plugin(app: &mut App) {
+    app.add_plugins(PixelCameraPlugin);
     app.add_systems(Startup, spawn_camera);
 }
 
@@ -15,5 +17,7 @@ fn spawn_camera(mut commands: Commands) {
         // [ui node outlines](https://bevyengine.org/news/bevy-0-14/#ui-node-outline-gizmos)
         // for debugging. So it's good to have this here for future-proofing.
         IsDefaultUiCamera,
+        PixelZoom::FitHeight(172),
+        PixelViewport,
     ));
 }

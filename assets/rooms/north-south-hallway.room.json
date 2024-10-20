@@ -1,0 +1,7 @@
+{
+    "room_name": "north-south-hallway",
+    "allowed_directions": [
+        "North",
+        "South"
+    ]
+}

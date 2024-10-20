@@ -878,6 +878,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_pixel_camera"
+version = "0.14.0"
+source = "git+https://github.com/porkbrain/bevy_pixel_camera?rev=623860527e646776a76c8def559c91e184fba116#623860527e646776a76c8def559c91e184fba116"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
 name = "bevy_ptr"
 version = "0.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1721,6 +1729,7 @@ dependencies = [
  "bevy_asset_loader",
  "bevy_common_assets",
  "bevy_easy_stats",
+ "bevy_pixel_camera",
  "log",
  "rand",
  "serde",

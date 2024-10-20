@@ -9,10 +9,13 @@ use bevy_asset_loader::{
     },
 };
 
-use crate::{audio::Music, screens::Screen, AppLoadingState};
+mod gameplay_ui;
+
+use crate::{audio::Music, map::GenerateMap, screens::Screen, AppLoadingState};
 
 pub(super) fn plugin(app: &mut App) {
-    app.add_systems(OnEnter(Screen::Gameplay), spawn_level);
+    app.add_plugins(gameplay_ui::plugin);
+    app.add_systems(OnEnter(Screen::Gameplay), spawn_gameplay_level);
     app.configure_loading_state(
         LoadingStateConfig::new(AppLoadingState::Loading).load_collection::<GameplayMusic>(),
     );
@@ -26,7 +29,9 @@ pub(super) fn plugin(app: &mut App) {
     );
 }
 
-fn spawn_level(mut commands: Commands) {}
+fn spawn_gameplay_level(mut commands: Commands) {
+    commands.add(GenerateMap { room_count: 10 });
+}
 
 #[derive(Resource, AssetCollection, Reflect, Clone)]
 pub struct GameplayMusic {
