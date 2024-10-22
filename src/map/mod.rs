@@ -8,7 +8,7 @@ use bevy::{
     prelude::{
         default, BuildWorldChildren, Component, Entity, Image, Mut, Res, Resource, Transform, World,
     },
-    reflect::Reflect,
+    reflect::{Reflect, TypePath},
     sprite::SpriteBundle,
     utils::HashMap,
 };
@@ -21,7 +21,11 @@ use bevy_asset_loader::{
     standard_dynamic_asset::StandardDynamicAssetCollection,
 };
 use bevy_common_assets::json::JsonAssetPlugin;
+use leafwing_manifest::{identifier::Id, manifest::Manifest};
+use manifest::RoomDefinitionManifest;
+use map_navigation::FocusedRoom;
 use serde::{Deserialize, Serialize};
+use toa_animator::ArtCollection;
 
 use crate::AppLoadingState;
 
@@ -30,6 +34,7 @@ pub use map_navigation::{ChangeRoom, MapRoomIndex};
 
 mod cleanup_map;
 mod generate_map;
+mod manifest;
 mod map_navigation;
 
 pub(super) fn plugin(app: &mut App) {
@@ -37,13 +42,8 @@ pub(super) fn plugin(app: &mut App) {
         generate_map::plugin,
         cleanup_map::plugin,
         map_navigation::plugin,
+        manifest::plugin,
     ));
-    app.add_plugins(JsonAssetPlugin::<RoomDefinition>::new(&["room.json"]));
-    app.configure_loading_state(
-        LoadingStateConfig::new(AppLoadingState::Loading)
-            .with_dynamic_assets_file::<StandardDynamicAssetCollection>("rooms.assets.ron")
-            .load_collection::<RoomAssets>(),
-    );
 }
 
 /// Unique identifier of a room
@@ -62,6 +62,7 @@ pub struct House {
 pub struct Room {
     /// The connections this room has to other rooms
     pub connections: HashMap<RoomConnectionDirection, RoomId>,
+    pub room_def_id: Id<RoomDefinition>,
 }
 
 /// The directions that a room can connect in
@@ -73,18 +74,11 @@ pub enum RoomConnectionDirection {
     West,
 }
 
-#[derive(Resource, AssetCollection, Reflect, Clone)]
-pub struct RoomAssets {
-    #[asset(key = "room_assets", collection(typed, mapped))]
-    pub room_definitions: HashMap<String, Handle<RoomDefinition>>,
-    #[asset(path = "images/entrance.png")]
-    pub texture: Handle<Image>,
-}
-
-#[derive(Reflect, Asset, Deserialize, Serialize)]
-struct RoomDefinition {
+#[derive(Asset, Debug, TypePath)]
+pub struct RoomDefinition {
     pub room_name: String,
     pub allowed_directions: Vec<RoomConnectionDirection>,
+    pub art_collection: ArtCollection,
 }
 
 /// Spawn a new room
@@ -97,26 +91,42 @@ pub struct SpawnRoom {
 
 impl Command for SpawnRoom {
     fn apply(self, world: &mut bevy::prelude::World) {
-        world.resource_scope(|world: &mut World, room_assets: Mut<RoomAssets>| {
-            let room = world
-                .spawn((
-                    self.room_id,
-                    Room {
-                        connections: self.room_connections,
-                    },
-                    SpriteBundle {
-                        transform: Transform::from_translation(Vec3::splat(
-                            self.room_id.0 as f32 * 1000.0,
-                        )),
-                        texture: room_assets.texture.clone(),
-                        ..default()
-                    },
-                ))
-                .id();
-            if let Some(mut house) = world.entity_mut(self.house_entity).get_mut::<House>() {
-                house.rooms.insert(self.room_id, room);
-            }
-            world.entity_mut(self.house_entity).push_children(&[room]);
-        });
+        world.resource_scope(
+            |world: &mut World, room_assets: Mut<RoomDefinitionManifest>| {
+                let room = world
+                    .spawn((
+                        self.room_id,
+                        Room {
+                            connections: self.room_connections,
+                            room_def_id: Id::from_name(&self.room_def_id),
+                        },
+                        SpriteBundle {
+                            transform: Transform::from_translation(Vec3::splat(
+                                (self.room_id.0 as f32 + 1.0) * 1000.0,
+                            )),
+                            texture: room_assets
+                                .get(Id::from_name(&self.room_def_id))
+                                .unwrap()
+                                .art_collection
+                                .textures
+                                .get("idle")
+                                .unwrap()
+                                .texture_handle()
+                                .clone(),
+                            ..default()
+                        },
+                    ))
+                    .id();
+                if let Some(mut house) = world.entity_mut(self.house_entity).get_mut::<House>() {
+                    house.rooms.insert(self.room_id, room);
+                }
+                if self.room_id == RoomId(0) {
+                    world
+                        .entity_mut(room)
+                        .insert((FocusedRoom, Transform::from_translation(Vec3::splat(0.0))));
+                }
+                world.entity_mut(self.house_entity).push_children(&[room]);
+            },
+        );
     }
 }

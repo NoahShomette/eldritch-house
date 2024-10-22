@@ -1,0 +1,91 @@
+{
+    "items": [
+        {
+            "room_name": "north-south-hallway",
+            "allowed_directions": [
+                "North",
+                "South"
+            ],
+            "animations": {
+                "idle": {
+                    "mode": "Repeat"
+                },
+                "animations": {}
+            },
+            "textures": {
+                "idle": {
+                    "Sprite": {
+                        "name": "idle",
+                        "file_path": "images/north-south.png"
+                    }
+                }
+            }
+        },
+        {
+            "room_name": "entrance",
+            "allowed_directions": [
+                "North",
+                "East",
+                "West"
+            ],
+            "animations": {
+                "idle": {
+                    "mode": "Repeat"
+                },
+                "animations": {}
+            },
+            "textures": {
+                "idle": {
+                    "Sprite": {
+                        "name": "idle",
+                        "file_path": "images/entrance.png"
+                    }
+                }
+            }
+        },
+        {
+            "room_name": "east-west-hallway",
+            "allowed_directions": [
+                "East",
+                "West"
+            ],
+            "animations": {
+                "idle": {
+                    "mode": "Repeat"
+                },
+                "animations": {}
+            },
+            "textures": {
+                "idle": {
+                    "Sprite": {
+                        "name": "idle",
+                        "file_path": "images/east-west.png"
+                    }
+                }
+            }
+        },
+        {
+            "room_name": "all-hallway",
+            "allowed_directions": [
+                "North",
+                "South",
+                "East",
+                "West"
+            ],
+            "animations": {
+                "idle": {
+                    "mode": "Repeat"
+                },
+                "animations": {}
+            },
+            "textures": {
+                "idle": {
+                    "Sprite": {
+                        "name": "idle",
+                        "file_path": "images/all-hallway.png"
+                    }
+                }
+            }
+        }
+    ]
+}

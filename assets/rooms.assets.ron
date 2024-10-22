@@ -1,5 +1,0 @@
-({
-"room_assets": Files(
-    paths:["rooms/entrance.room.json","rooms/north-south-hallway.room.json","rooms/east-west-hallway.room.json"],
-)
-})

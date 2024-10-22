@@ -12,6 +12,7 @@ use bevy::{
     prelude::*,
 };
 use bevy_asset_loader::loading_state::{LoadingState, LoadingStateAppExt};
+use leafwing_manifest::asset_state::AssetLoadingState;
 
 #[derive(States, Debug, PartialEq, Eq, Clone, Hash, Default)]
 pub enum AppLoadingState {
@@ -59,10 +60,12 @@ impl Plugin for AppPlugin {
                 })
                 .set(ImagePlugin::default_nearest()),
         );
-        app.enable_state_scoped_entities::<AppLoadingState>();
-        app.init_state::<AppLoadingState>().add_loading_state(
-            LoadingState::new(AppLoadingState::Loading).continue_to_state(AppLoadingState::Loaded),
-        );
+        app.init_state::<AppLoadingState>()
+            .enable_state_scoped_entities::<AppLoadingState>()
+            .add_loading_state(
+                LoadingState::new(AppLoadingState::Loading)
+                    .continue_to_state(AppLoadingState::Loaded),
+            );
 
         // Add other plugins.
         app.add_plugins((camera::plugin, screens::plugin, theme::plugin, map::plugin));

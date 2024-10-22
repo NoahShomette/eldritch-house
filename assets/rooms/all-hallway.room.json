@@ -1,9 +1,0 @@
-{
-    "room_name": "all-hallway",
-    "allowed_directions": [
-        "North",
-        "South",
-        "East",
-        "West"
-    ]
-}
