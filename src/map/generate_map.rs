@@ -35,6 +35,7 @@ impl Command for GenerateMap {
                     rooms: HashMap::new(),
                 },
                 VisibilityBundle::default(),
+                TransformBundle::from_transform(Transform::from_translation(Vec3::splat(0.0))),
                 StateScoped(Screen::Gameplay),
             ))
             .id();

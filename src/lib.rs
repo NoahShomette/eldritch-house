@@ -12,6 +12,7 @@ use bevy::{
     prelude::*,
 };
 use bevy_asset_loader::loading_state::{LoadingState, LoadingStateAppExt};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use leafwing_manifest::asset_state::AssetLoadingState;
 
 #[derive(States, Debug, PartialEq, Eq, Clone, Hash, Default)]
@@ -73,6 +74,8 @@ impl Plugin for AppPlugin {
         // Enable dev tools for dev builds.
         #[cfg(feature = "dev")]
         app.add_plugins(dev_tools::plugin);
+        #[cfg(feature = "dev")]
+        app.add_plugins(WorldInspectorPlugin::new());
     }
 }
 
